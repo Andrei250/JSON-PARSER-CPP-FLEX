@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Product",
+    "description": "A product from Acme's catalog",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "The unique identifier for a product",
+            "type": ["integer", "string", "boolean"]
+        },
+        "name": {
+            "description": "Name of the product",
+            "type": "string",
+			"accepted_values": [[1,2],[4,5]]
+        },
+        "price": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+			"required" : [true,false],
+			"value": {
+				"price": 100,
+				"make": ["bmw", "audi"],
+				"city":	["munich", "ingolstadt"],
+				"owners": [
+					{	"name": ["Kaiser","Muller"]		},
+					{	"name": ["Thomas","Schwein"]	},
+					{	"name": ["Jennet"]				},
+					{	"name": [null, null, null]		},
+					{	"name": [null]					}
+				]
+			}
+        },
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string",
+				"object": {
+					"nothing": true
+				}
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    },
+    "cost": ["id", "name", "price"]
+}

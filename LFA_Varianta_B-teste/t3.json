@@ -1,0 +1,31 @@
+[
+	{
+		"_id": "5973782bdb9a930533b05cb2",
+		"isActive": true,
+		"balance": 1446.35,
+		"age": 32,
+		"name": "Logan Keller",
+		"friends": [
+			{
+				"id": 0,
+				"name": "Colon Salazar"
+			},
+			{
+				"id": 1,
+				"name": "French McNeil"
+			},
+			{
+				"id": 2,
+				"name": "Carol Martin",
+				"relatives": [ "Jane Martin", "Josh Martin-Stocks"]
+			}
+		],
+		"favoriteFruit": "banana"
+	},
+	{
+		"_id": "42",
+		"isActive": [true, false],
+		"name": "John Answer",
+		"friends": ["Falsity", "Tautology"]
+	}
+]

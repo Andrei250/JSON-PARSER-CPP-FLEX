@@ -1,0 +1,12 @@
+{
+    "colors": "DA",
+    "TEST": {
+        "test": "NU",
+        "number": 4123,
+        "fraction": 123.123,
+        "fraction2": "1234.12341",
+        "null": null,
+        "da": true,
+        "nu": "false"
+    }
+}
