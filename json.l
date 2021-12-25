@@ -64,18 +64,29 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 
 	BEGIN(STARTOBJECT);
 }
-<INITIAL>{SPACE}*\[{SPACE}* 	{ std::cout << "INCEPUT DE ARRAY\n"; }
+<INITIAL>{SPACE}*\[{SPACE}* 	{ 
+	level++;
+
+	BEGIN(STARTARRAY);
+}
 
 <STARTOBJECT>{WORDPART}				{
 	currentNode += std::string(yytext);
 }
 <STARTOBJECT>{SPACE}*\:{SPACE}*		{ BEGIN(KEYVALUE); }
-<STARTOBJECT>{SPACE}*\[{SPACE}* 	{ BEGIN(INITIAL); }
+<STARTOBJECT>{SPACE}*\[{SPACE}* 	{
+	level++;
+	currentElements.insert("liste");
+	arrayIndexes.push(-1);
+
+	BEGIN(STARTARRAY);
+}
 <STARTOBJECT>{SPACE}*\{{SPACE}* 	{
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
+	arrayIndexes.push(-1);
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 
@@ -102,6 +113,40 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	BEGIN(STARTOBJECT);
 }
 
+<STARTARRAY>{SPACE}*(null|NULL|"NULL"|"null"){SPACE}* {
+	currentElements.insert("null");
+}
+<STARTARRAY>{SPACE}*{FRACTION}{SPACE}*|{SPACE}*{NUMBER}{SPACE}*  {
+	currentElements.insert("numere");
+}
+<STARTARRAY>{SPACE}*(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false"){SPACE}* {
+	currentElements.insert("booleeni");
+}
+<STARTARRAY>{WORDPART}			{
+	currentElements.insert("stringuri");
+}
+<STARTARRAY>{SPACE}*\[{SPACE}* 	{
+	level++;
+	currentElements.insert("liste");
+	arrayIndexes.push(0);
+
+	BEGIN(STARTARRAY);
+ }
+<STARTARRAY>{SPACE}*\{{SPACE}* 	{
+	currentElements.insert("obiecte");
+	level++;
+	levels.push(currentNode);
+	sets.push(currentElements);
+	arrayIndexes.push(0);
+	currentElements = std::unordered_set<std::string>();
+	currentNode = "";
+
+	BEGIN(STARTOBJECT);
+}
+<STARTARRAY>{SPACE}*\}{SPACE}*	{
+
+}
+
 <KEYVALUE>{SPACE}*(null|NULL|"NULL"|"null"){SPACE}* {
 	currentElements.insert("null");
 }
@@ -125,6 +170,7 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
+	arrayIndexes.push(-1);
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 
