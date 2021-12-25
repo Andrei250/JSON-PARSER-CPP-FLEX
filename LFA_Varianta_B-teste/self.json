@@ -7,6 +7,10 @@
         "fraction2": "1234.12341",
         "null": null,
         "da": true,
-        "nu": "false"
+        "nu": "false",
+        "price": {
+            "perbuc": 50,
+            "total": 500
+        }
     }
 }

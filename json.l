@@ -29,8 +29,14 @@
 		std::stack<std::string> saved = levels;
 		std::string path = "";
 
+		if (saved.size() >= 1) {
+			path = (saved.top() + " ");
+			saved.pop();
+		}
+
 		while (!saved.empty()) {
-			path += (saved.top() + " -> ");
+			path = (saved.top() + " -> ") + path;
+
 			saved.pop();
 		}
 
@@ -66,6 +72,7 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 <STARTOBJECT>{SPACE}*\:{SPACE}*		{ BEGIN(KEYVALUE); }
 <STARTOBJECT>{SPACE}*\[{SPACE}* 	{ BEGIN(INITIAL); }
 <STARTOBJECT>{SPACE}*\{{SPACE}* 	{
+	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
@@ -114,6 +121,7 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	BEGIN(STARTOBJECT);
 }
 <KEYVALUE>{SPACE}*\{{SPACE}*			{
+	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
