@@ -6,6 +6,9 @@
     #include <iostream>
 	#include <stack>
 	#include <unordered_set>
+	#include <fstream>
+
+	std::ofstream g("a.out");
 
 	/* Variabile CPP*/
 	std::stack<int> arrayIndexes;
@@ -35,16 +38,24 @@
 			saved.pop();
 
 			if (savedInd.size() >= 1) {
+				if (savedInd.top() != -1) {
+					path += "[" + std::to_string(savedInd.top()) + "] ";
+				}
+
 				savedInd.pop();
 			}
 		}
 
 		while (!saved.empty()) {
-			int ind = savedInd.top();
+			int ind;
 			std::string composed = saved.top();
 
+			if (savedInd.size()) {
+				ind = savedInd.top();
+				savedInd.pop();
+			}
+
 			saved.pop();
-			savedInd.pop();
 
 			while (ind != -1 && savedInd.size()) {
 				composed += " [" + std::to_string(ind) + "]";
@@ -69,8 +80,8 @@ DIGIT		[0-9]
 WORDPART	([a-zA-Z]|{DIGIT}|{SYMBOL})
 WORD        {WORDPART}+
 SPACE  		[ \t\r\n/"]
-FRACTION 	[+-]?{DIGIT}+[.]{DIGIT}+
-NUMBER		[+-]?{DIGIT}+
+FRACTION 	[/+/-]?{DIGIT}+[/.]{DIGIT}+
+NUMBER		[/+/-]?{DIGIT}+
 
 %x STARTARRAY STARTOBJECT KEYVALUE
 
@@ -78,10 +89,13 @@ NUMBER		[+-]?{DIGIT}+
 
 <INITIAL>{SPACE}* {}
 <INITIAL>\{ 	{
+	g << "INITIAL object open\n";
 	level++;
 	BEGIN(STARTOBJECT);
 }
 <INITIAL>\[	{ 
+	g << "INITIAL array open\n";
+
 	level++;
 	BEGIN(STARTARRAY);
 }
@@ -94,6 +108,7 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(KEYVALUE);
 }
 <STARTOBJECT>\[ {
+	g << "STARTOBJECT array open\n";
 	level++;
 	currentElements.insert("liste");
 	arrayIndexes.push(-1);
@@ -103,6 +118,7 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(STARTARRAY);
 }
 <STARTOBJECT>\{	{
+	g << "startobject object open\n";
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -114,13 +130,13 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(STARTOBJECT);
 }
 <STARTOBJECT>\} {
+	g << "startobject object close\n";
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
 		currentNode = levels.top();
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
-		levels.pop();
 
 		if (sets.size()) {
 			currentElements = sets.top();
@@ -132,15 +148,18 @@ NUMBER		[+-]?{DIGIT}+
 		level--;
 
 		if (currentIndex == 0) {
+			levels.pop();
+
 			BEGIN(STARTOBJECT);
+		} else {
+			BEGIN(STARTARRAY);	
 		}
 
-		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
 }
-<STARTOBJECT>\] {}
+<STARTOBJECT>\] {g << "startobject array close\n";}
 <STARTOBJECT>\, {}
 
 <STARTARRAY>\: {}
@@ -158,20 +177,24 @@ NUMBER		[+-]?{DIGIT}+
 	currentElements.insert("stringuri");
 }
 <STARTARRAY>\[ 	{
+	g << "startarray array open\n";
 	level++;
-	currentElements.insert("liste");
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
+
 	currentElements = std::unordered_set<std::string>();
+	currentIndex = 0;
 
 	BEGIN(STARTARRAY);
  }
 <STARTARRAY>\{	{
+	g << "startarray object open\n";
 	currentElements.insert("obiecte");
+
 	level++;
-	levels.push(currentNode);
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
+
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
@@ -179,13 +202,14 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(STARTOBJECT);
 }
 <STARTARRAY>\}	{
-	if (levels.size()) {
+	g << "startarray object close\n";
+
+	if (sets.size()) {
 		std::cout << buildOutput() << '\n';
 
 		currentNode = levels.top();
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
-		levels.pop();
 
 		if (sets.size()) {
 			currentElements = sets.top();
@@ -198,14 +222,16 @@ NUMBER		[+-]?{DIGIT}+
 
 		if (currentIndex == 0) {
 			BEGIN(STARTOBJECT);
+		} else {
+			BEGIN(STARTARRAY);
 		}
-
-		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
 }
 <STARTARRAY>\] {
+	g << "startarray array close\n";
+
 	currentIndex = arrayIndexes.top() + 1;
 	arrayIndexes.pop();
 
@@ -217,10 +243,12 @@ NUMBER		[+-]?{DIGIT}+
 	}
 
 	if (currentIndex == 0) {
-		BEGIN(STARTOBJECT);
-	}
+		levels.pop();
 
-	BEGIN(STARTARRAY);
+		BEGIN(STARTOBJECT);
+	} else {
+		BEGIN(STARTARRAY);
+	}
 }
 <STARTARRAY>\, {}
 
@@ -229,6 +257,7 @@ NUMBER		[+-]?{DIGIT}+
 	currentElements.insert("null");
 }
 <KEYVALUE>{FRACTION}|{NUMBER}  {
+	g << "MORTII MA-TII\n";
 	currentElements.insert("numere");
 }
 <KEYVALUE>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
@@ -244,21 +273,31 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(STARTOBJECT);
 }
 <KEYVALUE>\[			{
-	level++;
+	g << "keyvalue array open\n";
+
 	currentElements.insert("liste");
+
+	level++;
+	levels.push(currentNode);
 	sets.push(currentElements);
 	arrayIndexes.push(-1);
+
 	currentElements = std::unordered_set<std::string>();
+	currentNode = "";
 	currentIndex = 0;
 
 	BEGIN(STARTARRAY);
 }
 <KEYVALUE>\{			{
+	g << "keyvalue object open\n";
+
 	currentElements.insert("obiecte");
+
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
 	arrayIndexes.push(-1);
+
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
@@ -266,10 +305,13 @@ NUMBER		[+-]?{DIGIT}+
 	BEGIN(STARTOBJECT);
 }
 <KEYVALUE>\}			{
+	g << "keyvalue object close\n";
+
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
-		currentNode = levels.top();
+// #########################################################################################
+		currentNode = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 		levels.pop();
@@ -285,16 +327,17 @@ NUMBER		[+-]?{DIGIT}+
 
 		if (currentIndex == 0) {
 			BEGIN(STARTOBJECT);
+		} else {
+			BEGIN(STARTARRAY);
 		}
 
-		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
 }
 
 
-.|{SPACE}*           			{}
+.|{SPACE}*           			{g << "ORICE ALTCEVA\n";}
 
 %%
 
