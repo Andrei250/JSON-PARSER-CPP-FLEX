@@ -474,7 +474,9 @@ char *yytext;
 		std::string ans = "conține";
 
 		for (auto it : currentElements) {
-			ans += " " + it + ",";
+			if (it != "") {
+				ans += " " + it + ",";
+			}
 		}
 
 		ans.pop_back();
@@ -527,7 +529,7 @@ char *yytext;
 #define STARTOBJECT 2
 #define KEYVALUE 3
 
-#line 531 "json.cpp"
+#line 533 "json.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -689,10 +691,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 88 "json.l"
+#line 90 "json.l"
 
 
-#line 696 "json.cpp"
+#line 698 "json.cpp"
 
 	if ( yy_init )
 		{
@@ -777,12 +779,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 90 "json.l"
+#line 92 "json.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 91 "json.l"
+#line 93 "json.l"
 {
 	g << "INITIAL object open\n";
 	level++;
@@ -791,7 +793,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 96 "json.l"
+#line 98 "json.l"
 { 
 	g << "INITIAL array open\n";
 
@@ -801,26 +803,26 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 103 "json.l"
+#line 105 "json.l"
 {}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 104 "json.l"
+#line 106 "json.l"
 {
 	currentNode += std::string(yytext);
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 107 "json.l"
+#line 109 "json.l"
 {
 	BEGIN(KEYVALUE);
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 110 "json.l"
+#line 112 "json.l"
 {
 	g << "STARTOBJECT array open\n";
 	level++;
@@ -834,7 +836,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 120 "json.l"
+#line 122 "json.l"
 {
 	g << "startobject object open\n";
 	currentElements.insert("obiecte");
@@ -850,7 +852,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 132 "json.l"
+#line 134 "json.l"
 {
 	g << "startobject object close\n";
 	if (levels.size()) {
@@ -884,55 +886,63 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 162 "json.l"
+#line 164 "json.l"
 {g << "startobject array close\n";}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 163 "json.l"
-{}
+#line 165 "json.l"
+{
+	currentElements.insert(currentValue);
+}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 165 "json.l"
+#line 169 "json.l"
 {}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 166 "json.l"
+#line 170 "json.l"
 {}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 167 "json.l"
+#line 171 "json.l"
 {
-	currentElements.insert("null");
+	if (currentValue == "") {
+		currentValue = "null";
+	}
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 170 "json.l"
+#line 176 "json.l"
 {
-	currentElements.insert("numere");
+	if (currentValue == "") {
+		currentValue = "numere";
+	}
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 173 "json.l"
+#line 181 "json.l"
 {
-	currentElements.insert("booleeni");
+	if (currentValue == "") {
+		currentValue = "booleeni";
+	}
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 176 "json.l"
+#line 186 "json.l"
 {
-	currentElements.insert("stringuri");
+	currentValue = "siruri";
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 179 "json.l"
+#line 189 "json.l"
 {
 	g << "startarray array open\n";
 	level++;
@@ -941,16 +951,18 @@ YY_RULE_SETUP
 
 	currentElements = std::unordered_set<std::string>();
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTARRAY);
  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 190 "json.l"
+#line 201 "json.l"
 {
 	g << "startarray object open\n";
 	currentElements.insert("obiecte");
+	currentElements.insert(currentValue);
 
 	level++;
 	sets.push(currentElements);
@@ -959,20 +971,22 @@ YY_RULE_SETUP
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTOBJECT);
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 204 "json.l"
+#line 217 "json.l"
 {
 	g << "startarray object close\n";
 
 	if (sets.size()) {
 		std::cout << buildOutput() << '\n';
 
-		currentNode = levels.top();
+		currentValue = "";
+		currentNode = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 
@@ -997,10 +1011,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 232 "json.l"
+#line 246 "json.l"
 {
 	g << "startarray array close\n";
 
+	currentValue = "";
 	currentIndex = arrayIndexes.top() + 1;
 	arrayIndexes.pop();
 
@@ -1022,47 +1037,53 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 253 "json.l"
+#line 268 "json.l"
 {}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 255 "json.l"
+#line 270 "json.l"
 {}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 256 "json.l"
+#line 271 "json.l"
 {
-	currentElements.insert("null");
+	if (currentValue == "") {
+		currentValue = "null";
+	}
 }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 259 "json.l"
+#line 276 "json.l"
 {
-	g << "MORTII MA-TII\n";
-	currentElements.insert("numere");
+	if (currentValue == "") {
+		currentValue = "numere";
+	}
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 263 "json.l"
+#line 281 "json.l"
 {
-	currentElements.insert("booleeni");
+	if (currentValue == "") {
+		currentValue = "booleeni";
+	}
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 266 "json.l"
+#line 286 "json.l"
 {
-	currentElements.insert("șiruri");
+	currentValue = "siruri";
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 269 "json.l"
+#line 289 "json.l"
 {
+	currentElements.insert(currentValue);
 	currentValue = "";
 	currentNode = "";
 
@@ -1071,11 +1092,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 275 "json.l"
+#line 296 "json.l"
 {
 	g << "keyvalue array open\n";
 
 	currentElements.insert("liste");
+	currentElements.insert(currentValue);
 
 	level++;
 	levels.push(currentNode);
@@ -1085,16 +1107,18 @@ YY_RULE_SETUP
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTARRAY);
 }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 291 "json.l"
+#line 314 "json.l"
 {
 	g << "keyvalue object open\n";
 
+	currentElements.insert(currentValue);
 	currentElements.insert("obiecte");
 
 	level++;
@@ -1105,21 +1129,24 @@ YY_RULE_SETUP
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTOBJECT);
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 307 "json.l"
+#line 332 "json.l"
 {
 	g << "keyvalue object close\n";
+
+	currentElements.insert(currentValue);
 
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
-// #########################################################################################
 		currentNode = "";
+		currentValue = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 		levels.pop();
@@ -1146,15 +1173,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 340 "json.l"
+#line 367 "json.l"
 {g << "ORICE ALTCEVA\n";}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 342 "json.l"
+#line 369 "json.l"
 ECHO;
 	YY_BREAK
-#line 1158 "json.cpp"
+#line 1185 "json.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STARTARRAY):
 case YY_STATE_EOF(STARTOBJECT):
@@ -2047,7 +2074,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 342 "json.l"
+#line 369 "json.l"
 
 
 

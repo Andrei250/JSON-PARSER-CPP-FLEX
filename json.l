@@ -24,7 +24,9 @@
 		std::string ans = "conține";
 
 		for (auto it : currentElements) {
-			ans += " " + it + ",";
+			if (it != "") {
+				ans += " " + it + ",";
+			}
 		}
 
 		ans.pop_back();
@@ -160,21 +162,29 @@ NUMBER		[/+/-]?{DIGIT}+
 	}
 }
 <STARTOBJECT>\] {g << "startobject array close\n";}
-<STARTOBJECT>\, {}
+<STARTOBJECT>\, {
+	currentElements.insert(currentValue);
+}
 
 <STARTARRAY>\: {}
 <STARTARRAY>{SPACE}* {}
 <STARTARRAY>(null|NULL|"NULL"|"null") {
-	currentElements.insert("null");
+	if (currentValue == "") {
+		currentValue = "null";
+	}
 }
 <STARTARRAY>{FRACTION}|{NUMBER}  {
-	currentElements.insert("numere");
+	if (currentValue == "") {
+		currentValue = "numere";
+	}
 }
 <STARTARRAY>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
-	currentElements.insert("booleeni");
+	if (currentValue == "") {
+		currentValue = "booleeni";
+	}
 }
 <STARTARRAY>{WORDPART}			{
-	currentElements.insert("stringuri");
+	currentValue = "siruri";
 }
 <STARTARRAY>\[ 	{
 	g << "startarray array open\n";
@@ -184,12 +194,14 @@ NUMBER		[/+/-]?{DIGIT}+
 
 	currentElements = std::unordered_set<std::string>();
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTARRAY);
  }
 <STARTARRAY>\{	{
 	g << "startarray object open\n";
 	currentElements.insert("obiecte");
+	currentElements.insert(currentValue);
 
 	level++;
 	sets.push(currentElements);
@@ -198,6 +210,7 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTOBJECT);
 }
@@ -207,7 +220,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	if (sets.size()) {
 		std::cout << buildOutput() << '\n';
 
-		currentNode = levels.top();
+		currentValue = "";
+		currentNode = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 
@@ -232,6 +246,7 @@ NUMBER		[/+/-]?{DIGIT}+
 <STARTARRAY>\] {
 	g << "startarray array close\n";
 
+	currentValue = "";
 	currentIndex = arrayIndexes.top() + 1;
 	arrayIndexes.pop();
 
@@ -254,19 +269,25 @@ NUMBER		[/+/-]?{DIGIT}+
 
 <KEYVALUE>{SPACE}* {}
 <KEYVALUE>(null|NULL|"NULL"|"null") {
-	currentElements.insert("null");
+	if (currentValue == "") {
+		currentValue = "null";
+	}
 }
 <KEYVALUE>{FRACTION}|{NUMBER}  {
-	g << "MORTII MA-TII\n";
-	currentElements.insert("numere");
+	if (currentValue == "") {
+		currentValue = "numere";
+	}
 }
 <KEYVALUE>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
-	currentElements.insert("booleeni");
+	if (currentValue == "") {
+		currentValue = "booleeni";
+	}
 }
 <KEYVALUE>{WORDPART} 	{
-	currentElements.insert("șiruri");
+	currentValue = "siruri";
 }
 <KEYVALUE>\,			{
+	currentElements.insert(currentValue);
 	currentValue = "";
 	currentNode = "";
 
@@ -276,6 +297,7 @@ NUMBER		[/+/-]?{DIGIT}+
 	g << "keyvalue array open\n";
 
 	currentElements.insert("liste");
+	currentElements.insert(currentValue);
 
 	level++;
 	levels.push(currentNode);
@@ -285,12 +307,14 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTARRAY);
 }
 <KEYVALUE>\{			{
 	g << "keyvalue object open\n";
 
+	currentElements.insert(currentValue);
 	currentElements.insert("obiecte");
 
 	level++;
@@ -301,17 +325,20 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 	currentIndex = 0;
+	currentValue = "";
 
 	BEGIN(STARTOBJECT);
 }
 <KEYVALUE>\}			{
 	g << "keyvalue object close\n";
 
+	currentElements.insert(currentValue);
+
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
-// #########################################################################################
 		currentNode = "";
+		currentValue = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 		levels.pop();
