@@ -6,9 +6,6 @@
     #include <iostream>
 	#include <stack>
 	#include <unordered_set>
-	#include <fstream>
-
-	std::ofstream g("a.out");
 
 	/* Variabile CPP*/
 	std::stack<int> arrayIndexes;
@@ -36,7 +33,10 @@
 		if (saved.size() >= 1) {
 			path = (saved.top() + " ");
 			saved.pop();
-			savedInd.pop();
+
+			if (savedInd.size() >= 1) {
+				savedInd.pop();
+			}
 		}
 
 		while (!saved.empty()) {
@@ -46,8 +46,8 @@
 			saved.pop();
 			savedInd.pop();
 
-			while (ind != -1) {
-				composed += " [" + std::to_string(ind + '0') + "]";
+			while (ind != -1 && savedInd.size()) {
+				composed += " [" + std::to_string(ind) + "]";
 				ind = savedInd.top();
 				savedInd.pop();
 			}
@@ -61,65 +61,48 @@
 		return ans;
 	}
 
-	void printStuf() {
-		std::stack<int> savedInd = arrayIndexes;
-
-		while (savedInd.size()) {
-			g << savedInd.top() << " ";
-			savedInd.pop();
-		}
-
-		g << '\n';
-	}
 %}
 
 /* Declarari de patterns */
-SYMBOL      ["#$%@+.-_']
+SYMBOL      [/#/$/%/@/+/./-/_/']
 DIGIT		[0-9]
 WORDPART	([a-zA-Z]|{DIGIT}|{SYMBOL})
 WORD        {WORDPART}+
-SPACE  		[ \t\r\n]
-FRACTION 	{DIGIT}+[.]{DIGIT}+|["']{DIGIT}+[.]{DIGIT}+["']
-NUMBER		{DIGIT}+|["']{DIGIT}+["']
+SPACE  		[ \t\r\n/"]
+FRACTION 	[+-]?{DIGIT}+[.]{DIGIT}+
+NUMBER		[+-]?{DIGIT}+
 
 %x STARTARRAY STARTOBJECT KEYVALUE
 
 %%
 
-<INITIAL>{SPACE}*\{{SPACE}* 	{
+<INITIAL>{SPACE}* {}
+<INITIAL>\{ 	{
 	level++;
-	g << std::string(yytext) << " 91\n";
 	BEGIN(STARTOBJECT);
 }
-<INITIAL>{SPACE}*\[{SPACE}* 	{ 
+<INITIAL>\[	{ 
 	level++;
-	g << std::string(yytext) << " 96\n";
 	BEGIN(STARTARRAY);
 }
 
-<STARTOBJECT>{WORDPART}				{
+<STARTOBJECT>{SPACE}* 	{}
+<STARTOBJECT>{WORDPART}	{
 	currentNode += std::string(yytext);
-	g << std::string(yytext) << " 101\n";
 }
-<STARTOBJECT>{SPACE}*\:{SPACE}*		{
-	g << std::string(yytext) << " 105\n";
+<STARTOBJECT>\:	{
 	BEGIN(KEYVALUE);
 }
-<STARTOBJECT>{SPACE}*\[{SPACE}* 	{
-	g << std::string(yytext) << " 109\n";
+<STARTOBJECT>\[ {
 	level++;
 	currentElements.insert("liste");
 	arrayIndexes.push(-1);
 	sets.push(currentElements);
 	currentElements = std::unordered_set<std::string>();
 
-	printStuf();
-	g << "STARTOBJECT [\n";
-
 	BEGIN(STARTARRAY);
 }
-<STARTOBJECT>{SPACE}*\{{SPACE}* 	{
-	g << std::string(yytext) << " 122\n";
+<STARTOBJECT>\{	{
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -128,13 +111,9 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
 
-	printStuf();
-	g << "STARTOBJECT acolada \n";
-
 	BEGIN(STARTOBJECT);
 }
-<STARTOBJECT>{SPACE}*\}{SPACE}*	{
-	g << std::string(yytext) << " 137\n";
+<STARTOBJECT>\} {
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -151,64 +130,55 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 		}
 
 		level--;
+
+		if (currentIndex == 0) {
+			BEGIN(STARTOBJECT);
+		}
+
+		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
-	
-	if (currentIndex - 1 != -1) {
-		BEGIN(STARTARRAY);
-	}
-
-	BEGIN(STARTOBJECT);
 }
-<STARTOBJECT>{SPACE}*\,{SPACE}* {g << std::string(yytext) << " 164\n";}
+<STARTOBJECT>\] {}
+<STARTOBJECT>\, {}
 
-<STARTARRAY>{SPACE}*(null|NULL|"NULL"|"null"){SPACE}* {
-	g << std::string(yytext) << " 166\n";
+<STARTARRAY>\: {}
+<STARTARRAY>{SPACE}* {}
+<STARTARRAY>(null|NULL|"NULL"|"null") {
 	currentElements.insert("null");
 }
-<STARTARRAY>{SPACE}*{FRACTION}{SPACE}*|{SPACE}*{NUMBER}{SPACE}*  {
-	g << std::string(yytext) << " 171\n";
+<STARTARRAY>{FRACTION}|{NUMBER}  {
 	currentElements.insert("numere");
 }
-<STARTARRAY>{SPACE}*(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false"){SPACE}* {
-	g << std::string(yytext) << " 174\n";
+<STARTARRAY>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
 	currentElements.insert("booleeni");
 }
 <STARTARRAY>{WORDPART}			{
-	g << std::string(yytext) << " 179\n";
 	currentElements.insert("stringuri");
 }
-<STARTARRAY>{SPACE}*\[{SPACE}* 	{
-	g << std::string(yytext) << " 182\n";
+<STARTARRAY>\[ 	{
 	level++;
 	currentElements.insert("liste");
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
 	currentElements = std::unordered_set<std::string>();
 
-	printStuf();
-	g << "array [\n";
-
 	BEGIN(STARTARRAY);
  }
-<STARTARRAY>{SPACE}*\{{SPACE}* 	{
-	g << std::string(yytext) << " 195\n";
+<STARTARRAY>\{	{
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
 	sets.push(currentElements);
-	arrayIndexes.push(0);
+	arrayIndexes.push(currentIndex);
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
-
-	printStuf();
-	g << "array acolada\n";
+	currentIndex = 0;
 
 	BEGIN(STARTOBJECT);
 }
-<STARTARRAY>{SPACE}*\}{SPACE}*	{
-	g << std::string(yytext) << " 211\n";
+<STARTARRAY>\}	{
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -225,18 +195,17 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 		}
 
 		level--;
+
+		if (currentIndex == 0) {
+			BEGIN(STARTOBJECT);
+		}
+
+		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
-	
-	if (currentIndex - 1 != -1) {
-		BEGIN(STARTARRAY);
-	}
-
-	BEGIN(STARTOBJECT);
 }
-<STARTARRAY>{SPACE}*\]{SPACE}* {
-	g << std::string(yytext) << " 239\n";
+<STARTARRAY>\] {
 	currentIndex = arrayIndexes.top() + 1;
 	arrayIndexes.pop();
 
@@ -246,47 +215,45 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	} else {
 		currentElements = std::unordered_set<std::string>();
 	}
-}
-<STARTARRAY>{SPACE}*\,{SPACE}* {g << std::string(yytext) << " 250\n";}
 
-<KEYVALUE>{SPACE}*(null|NULL|"NULL"|"null"){SPACE}* {
-	g << std::string(yytext) << " 253\n";
+	if (currentIndex == 0) {
+		BEGIN(STARTOBJECT);
+	}
+
+	BEGIN(STARTARRAY);
+}
+<STARTARRAY>\, {}
+
+<KEYVALUE>{SPACE}* {}
+<KEYVALUE>(null|NULL|"NULL"|"null") {
 	currentElements.insert("null");
 }
-<KEYVALUE>{SPACE}*{FRACTION}{SPACE}*|{SPACE}*{NUMBER}{SPACE}*  {
-	g << std::string(yytext) << " 257\n";
+<KEYVALUE>{FRACTION}|{NUMBER}  {
 	currentElements.insert("numere");
 }
-<KEYVALUE>{SPACE}*(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false"){SPACE}* {
-	g << std::string(yytext) << " 260\n";
+<KEYVALUE>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
 	currentElements.insert("booleeni");
 }
-<KEYVALUE>{SPACE}*{WORDPART}{SPACE}* 	{
-	g << std::string(yytext) << " 265\n";
+<KEYVALUE>{WORDPART} 	{
 	currentElements.insert("șiruri");
 }
-<KEYVALUE>{SPACE}*\,{SPACE}*			{
-	g << std::string(yytext) << " 269\n";
+<KEYVALUE>\,			{
 	currentValue = "";
 	currentNode = "";
 
 	BEGIN(STARTOBJECT);
 }
-<KEYVALUE>{SPACE}*\[{SPACE}*			{
-	g << std::string(yytext) << " 276\n";
+<KEYVALUE>\[			{
 	level++;
 	currentElements.insert("liste");
 	sets.push(currentElements);
-	arrayIndexes.push(currentIndex);
+	arrayIndexes.push(-1);
 	currentElements = std::unordered_set<std::string>();
-
-	printStuf();
-	g << "keyvalue [\n";
+	currentIndex = 0;
 
 	BEGIN(STARTARRAY);
 }
-<KEYVALUE>{SPACE}*\{{SPACE}*			{
-	g << std::string(yytext) << " 289\n";
+<KEYVALUE>\{			{
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -294,14 +261,11 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 	arrayIndexes.push(-1);
 	currentElements = std::unordered_set<std::string>();
 	currentNode = "";
-
-	printStuf();
-	g << "keyvalue acolada\n";
+	currentIndex = 0;
 
 	BEGIN(STARTOBJECT);
 }
-<KEYVALUE>{SPACE}*\}{SPACE}*			{
-	g << std::string(yytext) << " 304\n";
+<KEYVALUE>\}			{
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -318,19 +282,19 @@ NUMBER		{DIGIT}+|["']{DIGIT}+["']
 		}
 
 		level--;
+
+		if (currentIndex == 0) {
+			BEGIN(STARTOBJECT);
+		}
+
+		BEGIN(STARTARRAY);
 	} else {
 		std::cout << "radacina " << buildOutput() << '\n';
 	}
-	
-	if (currentIndex - 1 != -1) {
-		BEGIN(STARTARRAY);
-	}
-
-	BEGIN(STARTOBJECT);
 }
 
 
-.|{SPACE}*           			{g << std::string(yytext) << " 333\n";}
+.|{SPACE}*           			{}
 
 %%
 
