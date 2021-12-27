@@ -39,14 +39,14 @@
 		if (saved.size() >= 1) {
 			path = (saved.top() + " ");
 			saved.pop();
+		}
 
-			if (savedInd.size() >= 1) {
-				if (savedInd.top() != -1) {
-					path += "[" + std::to_string(savedInd.top()) + "] ";
-				}
-
-				savedInd.pop();
+		if (savedInd.size() >= 1) {
+			if (savedInd.top() != -1) {
+				path += "[" + std::to_string(savedInd.top()) + "] ";
 			}
+
+			savedInd.pop();
 		}
 
 		while (!saved.empty()) {
@@ -136,10 +136,17 @@ NUMBER		[/+/-]?{DIGIT}+
 }
 <INITIAL>\[	{ 
 	g << "INITIAL array open\n";
-	afiseaza();
 	isArray = true;
 	level++;
+	sets.push(currentElements);
+	levels.push("");
+	arrayIndexes.push(-1);
+
+	currentElements = std::unordered_set<std::string>();
+
 	BEGIN(STARTARRAY);
+	afiseaza();
+
 }
 
 <STARTOBJECT>{SPACE}* 	{}
@@ -240,6 +247,7 @@ NUMBER		[/+/-]?{DIGIT}+
 <STARTARRAY>{WORDPART}			{
 	currentValue = "siruri";
 }
+<STARTARRAY>\- {}
 <STARTARRAY>\[ 	{
 	g << "startarray array open\n";
 
@@ -354,6 +362,7 @@ NUMBER		[/+/-]?{DIGIT}+
 <KEYVALUE>{WORDPART} 	{
 	currentValue = "siruri";
 }
+<STARTARRAY>\- {}
 <KEYVALUE>\,			{
 	currentElements.insert(currentValue);
 	currentValue = "";

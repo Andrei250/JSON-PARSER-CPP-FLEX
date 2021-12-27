@@ -1,460 +1,151 @@
-INITIAL object open
-LEVELS: 
-Indexes: 
-Sets
-
-keyvalue object open
-LEVELS: properties 
+INITIAL array open
+LEVELS:  
 Indexes: -1 
 Sets
-obiecte  siruri 
 
-keyvalue object open
-LEVELS: id properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: type id properties 
-Indexes: -1 -1 -1 
-Sets
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: id properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: properties 
-Indexes: -1 
-Sets
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: idname properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: accepted_values idname properties 
-Indexes: -1 -1 -1 
-Sets
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array open
-LEVELS: accepted_values idname properties 
-Indexes: 0 -1 -1 -1 
-Sets
-
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: accepted_values idname properties 
-Indexes: -1 -1 -1 
-Sets
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array open
-LEVELS: accepted_values idname properties 
-Indexes: 1 -1 -1 -1 
-Sets
-
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: accepted_values idname properties 
-Indexes: -1 -1 -1 
-Sets
- liste siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: idname properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: properties 
-Indexes: -1 
-Sets
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: idnameprice properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: required idnameprice properties 
-Indexes: -1 -1 -1 
-Sets
- liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: idnameprice properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: value idnameprice properties 
-Indexes: -1 -1 -1 
-Sets
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: make value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: value idnameprice properties 
-Indexes: -1 -1 -1 
-Sets
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: city value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: value idnameprice properties 
-Indexes: -1 -1 -1 
-Sets
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
-Indexes: 0 -1 -1 -1 -1 
+LEVELS:  
+Indexes: 0 -1 
 Sets
  obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
+
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
-Indexes: -1 0 -1 -1 -1 -1 
+LEVELS: friends  
+Indexes: -1 0 -1 
 Sets
- liste 
+ liste booleeni numere siruri 
  obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
 
-startarray array close
-LEVELS: owners value idnameprice properties 
-Indexes: 0 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
-Indexes: 1 -1 -1 -1 -1 
+LEVELS: friends  
+Indexes: 0 -1 0 -1 
 Sets
  obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: name owners value idnameprice properties 
-Indexes: -1 1 -1 -1 -1 -1 
-Sets
- liste 
+ liste booleeni numere siruri 
  obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
 
-startarray array close
-LEVELS: owners value idnameprice properties 
-Indexes: 1 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray object open
-LEVELS: owners value idnameprice properties 
-Indexes: 2 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: name owners value idnameprice properties 
-Indexes: -1 2 -1 -1 -1 -1 
-Sets
- liste 
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: owners value idnameprice properties 
-Indexes: 2 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray object open
-LEVELS: owners value idnameprice properties 
-Indexes: 3 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: name owners value idnameprice properties 
-Indexes: -1 3 -1 -1 -1 -1 
-Sets
- liste 
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: owners value idnameprice properties 
-Indexes: 3 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray object open
-LEVELS: owners value idnameprice properties 
-Indexes: 4 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue array open
-LEVELS: name owners value idnameprice properties 
-Indexes: -1 4 -1 -1 -1 -1 
-Sets
- liste 
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: owners value idnameprice properties 
-Indexes: 4 -1 -1 -1 -1 
-Sets
- obiecte 
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: owners value idnameprice properties 
-Indexes: -1 -1 -1 -1 
-Sets
- liste numere 
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startarray array close
-LEVELS: value idnameprice properties 
-Indexes: -1 -1 -1 
-Sets
-obiecte  liste numere siruri 
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: idnameprice properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-startobject object close
-LEVELS: properties 
-Indexes: -1 
-Sets
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: idnamepricetags properties 
-Indexes: -1 -1 
-Sets
-obiecte  
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: items idnamepricetags properties 
-Indexes: -1 -1 -1 
-Sets
-obiecte  siruri 
-obiecte  
-obiecte  siruri 
-
-keyvalue object open
-LEVELS: object items idnamepricetags properties 
-Indexes: -1 -1 -1 -1 
-Sets
-obiecte  siruri 
-obiecte  siruri 
-obiecte  
-obiecte  siruri 
 
 keyvalue object close
-LEVELS: items idnamepricetags properties 
-Indexes: -1 -1 -1 
+LEVELS: friends  
+Indexes: -1 0 -1 
 Sets
-obiecte  siruri 
-obiecte  
-obiecte  siruri 
+ liste booleeni numere siruri 
+ obiecte 
 
-startobject object close
-LEVELS: idnamepricetags properties 
-Indexes: -1 -1 
+
+startarray object open
+LEVELS: friends  
+Indexes: 1 -1 0 -1 
 Sets
-obiecte  
-obiecte  siruri 
+ obiecte 
+ liste booleeni numere siruri 
+ obiecte 
+
 
 keyvalue object close
-LEVELS: properties 
-Indexes: -1 
+LEVELS: friends  
+Indexes: -1 0 -1 
 Sets
-obiecte  siruri 
+ liste booleeni numere siruri 
+ obiecte 
 
-startobject object close
-LEVELS: 
-Indexes: 
+
+startarray object open
+LEVELS: friends  
+Indexes: 2 -1 0 -1 
 Sets
+ obiecte 
+ liste booleeni numere siruri 
+ obiecte 
+
 
 keyvalue array open
-LEVELS: propertiescost 
-Indexes: -1 
+LEVELS: relatives friends  
+Indexes: -1 2 -1 0 -1 
 Sets
-liste obiecte  siruri 
+ liste siruri numere 
+ obiecte 
+ liste booleeni numere siruri 
+ obiecte 
+
 
 startarray array close
-LEVELS: 
-Indexes: 
+LEVELS: friends  
+Indexes: 2 -1 0 -1 
 Sets
+ obiecte 
+ liste booleeni numere siruri 
+ obiecte 
+
 
 startobject object close
+LEVELS: friends  
+Indexes: -1 0 -1 
+Sets
+ liste booleeni numere siruri 
+ obiecte 
+
+
+startarray array close
+LEVELS:  
+Indexes: 0 -1 
+Sets
+ obiecte 
+
+
+keyvalue object close
+LEVELS:  
+Indexes: -1 
+Sets
+
+
+startarray object open
+LEVELS:  
+Indexes: 1 -1 
+Sets
+ obiecte 
+
+
+keyvalue array open
+LEVELS: isActive  
+Indexes: -1 1 -1 
+Sets
+ liste numere 
+ obiecte 
+
+
+startarray array close
+LEVELS:  
+Indexes: 1 -1 
+Sets
+ obiecte 
+
+
+keyvalue array open
+LEVELS: friends  
+Indexes: -1 1 -1 
+Sets
+ liste siruri numere 
+ obiecte 
+
+
+startarray array close
+LEVELS:  
+Indexes: 1 -1 
+Sets
+ obiecte 
+
+
+startobject object close
+LEVELS:  
+Indexes: -1 
+Sets
+
+
+startarray array close
 LEVELS: 
 Indexes: 
 Sets
