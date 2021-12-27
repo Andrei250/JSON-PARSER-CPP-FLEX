@@ -469,6 +469,7 @@ char *yytext;
 	std::string currentValue = "";
 	std::stack<std::unordered_set<std::string>> sets;
 	std::unordered_set<std::string> currentElements;
+	bool isArray = false;
 
 	std::string buildOutput() {
 		std::string ans = "conține";
@@ -524,12 +525,49 @@ char *yytext;
 		return ans;
 	}
 
+	void afiseaza() {
+		std::stack<std::unordered_set<std::string>> s1 = sets;
+		std::stack<std::string> s2 = levels;
+		std::stack<int> s3 = arrayIndexes;
+
+		g << "LEVELS: ";
+
+		while (!s2.empty()) {
+			g << s2.top() << " ";
+			s2.pop();
+		}
+
+		g << '\n';
+
+		g << "Indexes: ";
+
+		while (!s3.empty()) {
+			g << s3.top() << " ";
+			s3.pop();
+		}
+
+		g << "\nSets\n";
+
+		while (!s1.empty()) {
+			std::unordered_set<std::string> st = s1.top();
+			s1.pop();
+
+			for (auto it : st) {
+				g << it << " ";
+			}
+
+			g << '\n';
+		}
+
+		g << '\n';
+	}
+
 /* Declarari de patterns */
 #define STARTARRAY 1
 #define STARTOBJECT 2
 #define KEYVALUE 3
 
-#line 533 "json.cpp"
+#line 571 "json.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -691,10 +729,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 90 "json.l"
+#line 128 "json.l"
 
 
-#line 698 "json.cpp"
+#line 736 "json.cpp"
 
 	if ( yy_init )
 		{
@@ -779,52 +817,55 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 92 "json.l"
+#line 130 "json.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 93 "json.l"
+#line 131 "json.l"
 {
 	g << "INITIAL object open\n";
+	afiseaza();
 	level++;
 	BEGIN(STARTOBJECT);
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 98 "json.l"
+#line 137 "json.l"
 { 
 	g << "INITIAL array open\n";
-
+	afiseaza();
+	isArray = true;
 	level++;
 	BEGIN(STARTARRAY);
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 105 "json.l"
+#line 145 "json.l"
 {}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 106 "json.l"
+#line 146 "json.l"
 {
 	currentNode += std::string(yytext);
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 109 "json.l"
+#line 149 "json.l"
 {
 	BEGIN(KEYVALUE);
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 112 "json.l"
+#line 152 "json.l"
 {
 	g << "STARTOBJECT array open\n";
+
 	level++;
 	currentElements.insert("liste");
 	arrayIndexes.push(-1);
@@ -832,13 +873,16 @@ YY_RULE_SETUP
 	currentElements = std::unordered_set<std::string>();
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 122 "json.l"
+#line 165 "json.l"
 {
 	g << "startobject object open\n";
+
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -848,13 +892,16 @@ YY_RULE_SETUP
 	currentNode = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 134 "json.l"
+#line 180 "json.l"
 {
 	g << "startobject object close\n";
+
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -879,36 +926,39 @@ YY_RULE_SETUP
 			BEGIN(STARTARRAY);	
 		}
 
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 164 "json.l"
-{g << "startobject array close\n";}
+#line 211 "json.l"
+{
+	g << "startobject array close\n";
+	afiseaza();
+}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 165 "json.l"
+#line 215 "json.l"
 {
 	currentElements.insert(currentValue);
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 169 "json.l"
+#line 219 "json.l"
 {}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 170 "json.l"
+#line 220 "json.l"
 {}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 171 "json.l"
+#line 221 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "null";
@@ -917,16 +967,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 176 "json.l"
+#line 226 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "numere";
+	} else if (currentValue == "numere" &&
+		((std::string(yytext))[0] == '-' ||
+		(std::string(yytext))[0] == '+')) {
+		currentValue = "siruri";
 	}
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 181 "json.l"
+#line 235 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "booleeni";
@@ -935,16 +989,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 186 "json.l"
+#line 240 "json.l"
 {
 	currentValue = "siruri";
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 189 "json.l"
+#line 243 "json.l"
 {
 	g << "startarray array open\n";
+
+
 	level++;
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
@@ -954,13 +1010,17 @@ YY_RULE_SETUP
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
  }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 201 "json.l"
+#line 259 "json.l"
 {
 	g << "startarray object open\n";
+
+
 	currentElements.insert("obiecte");
 	currentElements.insert(currentValue);
 
@@ -974,11 +1034,13 @@ YY_RULE_SETUP
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 217 "json.l"
+#line 279 "json.l"
 {
 	g << "startarray object close\n";
 
@@ -1004,14 +1066,14 @@ YY_RULE_SETUP
 		} else {
 			BEGIN(STARTARRAY);
 		}
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 246 "json.l"
+#line 308 "json.l"
 {
 	g << "startarray array close\n";
 
@@ -1033,21 +1095,23 @@ YY_RULE_SETUP
 	} else {
 		BEGIN(STARTARRAY);
 	}
+	afiseaza();
+
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 268 "json.l"
+#line 332 "json.l"
 {}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 270 "json.l"
+#line 334 "json.l"
 {}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 271 "json.l"
+#line 335 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "null";
@@ -1056,16 +1120,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 276 "json.l"
+#line 340 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "numere";
+	} else if (currentValue == "numere" &&
+		((std::string(yytext))[0] == '-' ||
+		(std::string(yytext))[0] == '+')) {
+		currentValue = "siruri";
 	}
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 281 "json.l"
+#line 349 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "booleeni";
@@ -1074,14 +1142,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 286 "json.l"
+#line 354 "json.l"
 {
 	currentValue = "siruri";
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 289 "json.l"
+#line 357 "json.l"
 {
 	currentElements.insert(currentValue);
 	currentValue = "";
@@ -1092,7 +1160,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 296 "json.l"
+#line 364 "json.l"
 {
 	g << "keyvalue array open\n";
 
@@ -1110,11 +1178,13 @@ YY_RULE_SETUP
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
 }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 314 "json.l"
+#line 384 "json.l"
 {
 	g << "keyvalue object open\n";
 
@@ -1132,11 +1202,13 @@ YY_RULE_SETUP
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 332 "json.l"
+#line 404 "json.l"
 {
 	g << "keyvalue object close\n";
 
@@ -1149,7 +1221,6 @@ YY_RULE_SETUP
 		currentValue = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
-		levels.pop();
 
 		if (sets.size()) {
 			currentElements = sets.top();
@@ -1161,27 +1232,29 @@ YY_RULE_SETUP
 		level--;
 
 		if (currentIndex == 0) {
+			levels.pop();
+
 			BEGIN(STARTOBJECT);
 		} else {
 			BEGIN(STARTARRAY);
 		}
 
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 367 "json.l"
+#line 440 "json.l"
 {g << "ORICE ALTCEVA\n";}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 369 "json.l"
+#line 442 "json.l"
 ECHO;
 	YY_BREAK
-#line 1185 "json.cpp"
+#line 1258 "json.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STARTARRAY):
 case YY_STATE_EOF(STARTOBJECT):
@@ -2074,7 +2147,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 369 "json.l"
+#line 442 "json.l"
 
 
 
@@ -2085,6 +2158,10 @@ int main(int argc, char** argv){
 	}
 	yyin = fopen(argv[1], "r");
 	yylex();
+
+	if (!isArray) {
+		std::cout << "radacina " << buildOutput() << '\n';
+	}
 
 	fclose(yyin);
 	return 0;

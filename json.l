@@ -19,6 +19,7 @@
 	std::string currentValue = "";
 	std::stack<std::unordered_set<std::string>> sets;
 	std::unordered_set<std::string> currentElements;
+	bool isArray = false;
 
 	std::string buildOutput() {
 		std::string ans = "conține";
@@ -74,6 +75,43 @@
 		return ans;
 	}
 
+	void afiseaza() {
+		std::stack<std::unordered_set<std::string>> s1 = sets;
+		std::stack<std::string> s2 = levels;
+		std::stack<int> s3 = arrayIndexes;
+
+		g << "LEVELS: ";
+
+		while (!s2.empty()) {
+			g << s2.top() << " ";
+			s2.pop();
+		}
+
+		g << '\n';
+
+		g << "Indexes: ";
+
+		while (!s3.empty()) {
+			g << s3.top() << " ";
+			s3.pop();
+		}
+
+		g << "\nSets\n";
+
+		while (!s1.empty()) {
+			std::unordered_set<std::string> st = s1.top();
+			s1.pop();
+
+			for (auto it : st) {
+				g << it << " ";
+			}
+
+			g << '\n';
+		}
+
+		g << '\n';
+	}
+
 %}
 
 /* Declarari de patterns */
@@ -82,7 +120,7 @@ DIGIT		[0-9]
 WORDPART	([a-zA-Z]|{DIGIT}|{SYMBOL})
 WORD        {WORDPART}+
 SPACE  		[ \t\r\n/"]
-FRACTION 	[/+/-]?{DIGIT}+[/.]{DIGIT}+
+FRACTION 	[/+/-]?({DIGIT}+[/.]{DIGIT}+)
 NUMBER		[/+/-]?{DIGIT}+
 
 %x STARTARRAY STARTOBJECT KEYVALUE
@@ -92,12 +130,14 @@ NUMBER		[/+/-]?{DIGIT}+
 <INITIAL>{SPACE}* {}
 <INITIAL>\{ 	{
 	g << "INITIAL object open\n";
+	afiseaza();
 	level++;
 	BEGIN(STARTOBJECT);
 }
 <INITIAL>\[	{ 
 	g << "INITIAL array open\n";
-
+	afiseaza();
+	isArray = true;
 	level++;
 	BEGIN(STARTARRAY);
 }
@@ -111,6 +151,7 @@ NUMBER		[/+/-]?{DIGIT}+
 }
 <STARTOBJECT>\[ {
 	g << "STARTOBJECT array open\n";
+
 	level++;
 	currentElements.insert("liste");
 	arrayIndexes.push(-1);
@@ -118,9 +159,12 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
 }
 <STARTOBJECT>\{	{
 	g << "startobject object open\n";
+
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -130,9 +174,12 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentNode = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 <STARTOBJECT>\} {
 	g << "startobject object close\n";
+
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -157,11 +204,14 @@ NUMBER		[/+/-]?{DIGIT}+
 			BEGIN(STARTARRAY);	
 		}
 
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
-<STARTOBJECT>\] {g << "startobject array close\n";}
+<STARTOBJECT>\] {
+	g << "startobject array close\n";
+	afiseaza();
+}
 <STARTOBJECT>\, {
 	currentElements.insert(currentValue);
 }
@@ -176,6 +226,10 @@ NUMBER		[/+/-]?{DIGIT}+
 <STARTARRAY>{FRACTION}|{NUMBER}  {
 	if (currentValue == "") {
 		currentValue = "numere";
+	} else if (currentValue == "numere" &&
+		((std::string(yytext))[0] == '-' ||
+		(std::string(yytext))[0] == '+')) {
+		currentValue = "siruri";
 	}
 }
 <STARTARRAY>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
@@ -188,6 +242,8 @@ NUMBER		[/+/-]?{DIGIT}+
 }
 <STARTARRAY>\[ 	{
 	g << "startarray array open\n";
+
+
 	level++;
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
@@ -197,9 +253,13 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
  }
 <STARTARRAY>\{	{
 	g << "startarray object open\n";
+
+
 	currentElements.insert("obiecte");
 	currentElements.insert(currentValue);
 
@@ -213,6 +273,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 <STARTARRAY>\}	{
 	g << "startarray object close\n";
@@ -239,9 +301,9 @@ NUMBER		[/+/-]?{DIGIT}+
 		} else {
 			BEGIN(STARTARRAY);
 		}
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
 <STARTARRAY>\] {
 	g << "startarray array close\n";
@@ -264,6 +326,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	} else {
 		BEGIN(STARTARRAY);
 	}
+	afiseaza();
+
 }
 <STARTARRAY>\, {}
 
@@ -276,6 +340,10 @@ NUMBER		[/+/-]?{DIGIT}+
 <KEYVALUE>{FRACTION}|{NUMBER}  {
 	if (currentValue == "") {
 		currentValue = "numere";
+	} else if (currentValue == "numere" &&
+		((std::string(yytext))[0] == '-' ||
+		(std::string(yytext))[0] == '+')) {
+		currentValue = "siruri";
 	}
 }
 <KEYVALUE>(true|TRUE|"TRUE"|"true"|false|FALSE|"FALSE"|"false") {
@@ -310,6 +378,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
+	afiseaza();
+
 }
 <KEYVALUE>\{			{
 	g << "keyvalue object open\n";
@@ -328,6 +398,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
+	afiseaza();
+
 }
 <KEYVALUE>\}			{
 	g << "keyvalue object close\n";
@@ -341,7 +413,6 @@ NUMBER		[/+/-]?{DIGIT}+
 		currentValue = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
-		levels.pop();
 
 		if (sets.size()) {
 			currentElements = sets.top();
@@ -353,14 +424,16 @@ NUMBER		[/+/-]?{DIGIT}+
 		level--;
 
 		if (currentIndex == 0) {
+			levels.pop();
+
 			BEGIN(STARTOBJECT);
 		} else {
 			BEGIN(STARTARRAY);
 		}
 
-	} else {
-		std::cout << "radacina " << buildOutput() << '\n';
 	}
+	afiseaza();
+
 }
 
 
@@ -376,6 +449,10 @@ int main(int argc, char** argv){
 	}
 	yyin = fopen(argv[1], "r");
 	yylex();
+
+	if (!isArray) {
+		std::cout << "radacina " << buildOutput() << '\n';
+	}
 
 	fclose(yyin);
 	return 0;
