@@ -49,6 +49,10 @@
 			savedInd.pop();
 		}
 
+		if (savedInd.size() >= 1 && savedInd.top() == -1) {
+			savedInd.pop();
+		}
+
 		while (!saved.empty()) {
 			int ind;
 			std::string composed = saved.top();

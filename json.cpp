@@ -499,6 +499,10 @@ char *yytext;
 			savedInd.pop();
 		}
 
+		if (savedInd.size() >= 1 && savedInd.top() == -1) {
+			savedInd.pop();
+		}
+
 		while (!saved.empty()) {
 			int ind;
 			std::string composed = saved.top();
@@ -567,7 +571,7 @@ char *yytext;
 #define STARTOBJECT 2
 #define KEYVALUE 3
 
-#line 571 "json.cpp"
+#line 575 "json.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -729,10 +733,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 128 "json.l"
+#line 132 "json.l"
 
 
-#line 736 "json.cpp"
+#line 740 "json.cpp"
 
 	if ( yy_init )
 		{
@@ -817,12 +821,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 130 "json.l"
+#line 134 "json.l"
 {}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 131 "json.l"
+#line 135 "json.l"
 {
 	g << "INITIAL object open\n";
 	afiseaza();
@@ -832,7 +836,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 137 "json.l"
+#line 141 "json.l"
 { 
 	g << "INITIAL array open\n";
 	isArray = true;
@@ -850,26 +854,26 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 152 "json.l"
+#line 156 "json.l"
 {}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 153 "json.l"
+#line 157 "json.l"
 {
 	currentNode += std::string(yytext);
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 156 "json.l"
+#line 160 "json.l"
 {
 	BEGIN(KEYVALUE);
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 159 "json.l"
+#line 163 "json.l"
 {
 	g << "STARTOBJECT array open\n";
 
@@ -886,7 +890,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 172 "json.l"
+#line 176 "json.l"
 {
 	g << "startobject object open\n";
 
@@ -905,7 +909,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 187 "json.l"
+#line 191 "json.l"
 {
 	g << "startobject object close\n";
 
@@ -940,7 +944,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 218 "json.l"
+#line 222 "json.l"
 {
 	g << "startobject array close\n";
 	afiseaza();
@@ -948,24 +952,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 222 "json.l"
+#line 226 "json.l"
 {
 	currentElements.insert(currentValue);
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 226 "json.l"
+#line 230 "json.l"
 {}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 227 "json.l"
+#line 231 "json.l"
 {}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 228 "json.l"
+#line 232 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "null";
@@ -974,7 +978,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 233 "json.l"
+#line 237 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "numere";
@@ -987,7 +991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 242 "json.l"
+#line 246 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "booleeni";
@@ -996,19 +1000,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 247 "json.l"
+#line 251 "json.l"
 {
 	currentValue = "siruri";
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 250 "json.l"
+#line 254 "json.l"
 {}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 251 "json.l"
+#line 255 "json.l"
 {
 	g << "startarray array open\n";
 
@@ -1028,7 +1032,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 267 "json.l"
+#line 271 "json.l"
 {
 	g << "startarray object open\n";
 
@@ -1052,7 +1056,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 287 "json.l"
+#line 291 "json.l"
 {
 	g << "startarray object close\n";
 
@@ -1085,7 +1089,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 316 "json.l"
+#line 320 "json.l"
 {
 	g << "startarray array close\n";
 
@@ -1113,17 +1117,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 340 "json.l"
+#line 344 "json.l"
 {}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 342 "json.l"
+#line 346 "json.l"
 {}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 343 "json.l"
+#line 347 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "null";
@@ -1132,7 +1136,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 348 "json.l"
+#line 352 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "numere";
@@ -1145,7 +1149,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 357 "json.l"
+#line 361 "json.l"
 {
 	if (currentValue == "") {
 		currentValue = "booleeni";
@@ -1154,19 +1158,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 362 "json.l"
+#line 366 "json.l"
 {
 	currentValue = "siruri";
 }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 365 "json.l"
+#line 369 "json.l"
 {}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 366 "json.l"
+#line 370 "json.l"
 {
 	currentElements.insert(currentValue);
 	currentValue = "";
@@ -1177,7 +1181,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 373 "json.l"
+#line 377 "json.l"
 {
 	g << "keyvalue array open\n";
 
@@ -1201,7 +1205,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 393 "json.l"
+#line 397 "json.l"
 {
 	g << "keyvalue object open\n";
 
@@ -1225,7 +1229,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 413 "json.l"
+#line 417 "json.l"
 {
 	g << "keyvalue object close\n";
 
@@ -1263,15 +1267,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 449 "json.l"
+#line 453 "json.l"
 {g << "ORICE ALTCEVA\n";}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 451 "json.l"
+#line 455 "json.l"
 ECHO;
 	YY_BREAK
-#line 1275 "json.cpp"
+#line 1279 "json.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STARTARRAY):
 case YY_STATE_EOF(STARTOBJECT):
@@ -2164,7 +2168,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 451 "json.l"
+#line 455 "json.l"
 
 
 
