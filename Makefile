@@ -1,20 +1,22 @@
-CC=g++
-LEX=flex
-LDFLAGS=-lfl
-CFLAGS=-c -g
+# Dumitrescu Andrei 333CC
+
 OFLAGS=-o $@
-SRC=json.l
+FILE=json.l
+FISIER=./teste/t1l.json
 
 json: json.o 
-	$(CC) -o $@ $^ $(LDFLAGS)
+	g++ -o $@ $^ -lfl
 
 json.o: json.cpp
-	$(CC) $(CFLAGS) -o $@ $<
+	g++ -c -g -o $@ $<
 
-json.cpp: $(SRC)
-	$(LEX) -o$@ $(SRC)
+json.cpp: $(FILE)
+	flex -o$@ $(FILE)
 
 .PHONY: clean
 
+run:
+	./json $(FISIER)
+
 clean: 
-	rm *~ *.o json.cpp json
+	rm *.o json.cpp json
