@@ -194,7 +194,7 @@ NUMBER		[/+/-]?{DIGIT}+
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
-		currentNode = levels.top();
+		currentNode = "";
 		currentIndex = arrayIndexes.top() + 1;
 		arrayIndexes.pop();
 
@@ -222,6 +222,7 @@ NUMBER		[/+/-]?{DIGIT}+
 <STARTOBJECT>\] {
 	g << "startobject array close\n";
 	afiseaza();
+	currentNode = "";
 }
 <STARTOBJECT>\, {
 	currentElements.insert(currentValue);
@@ -321,6 +322,7 @@ NUMBER		[/+/-]?{DIGIT}+
 	g << "startarray array close\n";
 
 	currentValue = "";
+	currentNode = "";
 	currentIndex = arrayIndexes.top() + 1;
 	arrayIndexes.pop();
 
@@ -367,6 +369,7 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "siruri";
 }
 <KEYVALUE>\- {}
+<KEYVALUE>\: {}
 <KEYVALUE>\,			{
 	currentElements.insert(currentValue);
 	currentValue = "";

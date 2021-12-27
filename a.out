@@ -38,14 +38,14 @@ Sets
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: idname properties 
+LEVELS: name properties 
 Indexes: -1 -1 
 Sets
 obiecte  
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: accepted_values idname properties 
+LEVELS: accepted_values name properties 
 Indexes: -1 -1 -1 
 Sets
  liste siruri 
@@ -53,7 +53,7 @@ obiecte
 obiecte  siruri 
 
 startarray array open
-LEVELS: accepted_values idname properties 
+LEVELS: accepted_values name properties 
 Indexes: 0 -1 -1 -1 
 Sets
 
@@ -62,7 +62,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: accepted_values idname properties 
+LEVELS: accepted_values name properties 
 Indexes: -1 -1 -1 
 Sets
  liste siruri 
@@ -70,7 +70,7 @@ obiecte
 obiecte  siruri 
 
 startarray array open
-LEVELS: accepted_values idname properties 
+LEVELS: accepted_values name properties 
 Indexes: 1 -1 -1 -1 
 Sets
 
@@ -79,7 +79,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: accepted_values idname properties 
+LEVELS: accepted_values name properties 
 Indexes: -1 -1 -1 
 Sets
  liste siruri 
@@ -87,7 +87,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: idname properties 
+LEVELS: name properties 
 Indexes: -1 -1 
 Sets
 obiecte  
@@ -100,14 +100,14 @@ Sets
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: idnameprice properties 
+LEVELS: price properties 
 Indexes: -1 -1 
 Sets
 obiecte  
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: required idnameprice properties 
+LEVELS: required price properties 
 Indexes: -1 -1 -1 
 Sets
  liste numere siruri 
@@ -115,14 +115,14 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: idnameprice properties 
+LEVELS: price properties 
 Indexes: -1 -1 
 Sets
 obiecte  
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: value idnameprice properties 
+LEVELS: value price properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  liste numere siruri 
@@ -130,7 +130,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: make value idnameprice properties 
+LEVELS: make value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -139,7 +139,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: value idnameprice properties 
+LEVELS: value price properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  liste numere siruri 
@@ -147,7 +147,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: city value idnameprice properties 
+LEVELS: city value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -156,7 +156,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: value idnameprice properties 
+LEVELS: value price properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  liste numere siruri 
@@ -164,7 +164,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -173,7 +173,7 @@ obiecte
 obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 0 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -183,7 +183,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
+LEVELS: name owners value price properties 
 Indexes: -1 0 -1 -1 -1 -1 
 Sets
  liste 
@@ -194,7 +194,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 0 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -204,7 +204,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -213,7 +213,7 @@ obiecte
 obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 1 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -223,7 +223,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
+LEVELS: name owners value price properties 
 Indexes: -1 1 -1 -1 -1 -1 
 Sets
  liste 
@@ -234,7 +234,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 1 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -244,7 +244,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -253,7 +253,7 @@ obiecte
 obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 2 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -263,7 +263,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
+LEVELS: name owners value price properties 
 Indexes: -1 2 -1 -1 -1 -1 
 Sets
  liste 
@@ -274,7 +274,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 2 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -284,7 +284,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -293,7 +293,7 @@ obiecte
 obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 3 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -303,7 +303,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
+LEVELS: name owners value price properties 
 Indexes: -1 3 -1 -1 -1 -1 
 Sets
  liste 
@@ -314,7 +314,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 3 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -324,7 +324,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -333,7 +333,7 @@ obiecte
 obiecte  siruri 
 
 startarray object open
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 4 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -343,7 +343,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue array open
-LEVELS: name owners value idnameprice properties 
+LEVELS: name owners value price properties 
 Indexes: -1 4 -1 -1 -1 -1 
 Sets
  liste 
@@ -354,7 +354,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: 4 -1 -1 -1 -1 
 Sets
  obiecte 
@@ -364,7 +364,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: owners value idnameprice properties 
+LEVELS: owners value price properties 
 Indexes: -1 -1 -1 -1 
 Sets
  liste numere 
@@ -373,7 +373,7 @@ obiecte
 obiecte  siruri 
 
 startarray array close
-LEVELS: value idnameprice properties 
+LEVELS: value price properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  liste numere siruri 
@@ -381,7 +381,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: idnameprice properties 
+LEVELS: price properties 
 Indexes: -1 -1 
 Sets
 obiecte  
@@ -394,14 +394,14 @@ Sets
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: idnamepricetags properties 
+LEVELS: tags properties 
 Indexes: -1 -1 
 Sets
 obiecte  
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: items idnamepricetags properties 
+LEVELS: items tags properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  siruri 
@@ -409,7 +409,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue object open
-LEVELS: object items idnamepricetags properties 
+LEVELS: object items tags properties 
 Indexes: -1 -1 -1 -1 
 Sets
 obiecte  siruri 
@@ -418,7 +418,7 @@ obiecte
 obiecte  siruri 
 
 keyvalue object close
-LEVELS: items idnamepricetags properties 
+LEVELS: items tags properties 
 Indexes: -1 -1 -1 
 Sets
 obiecte  siruri 
@@ -426,7 +426,7 @@ obiecte
 obiecte  siruri 
 
 startobject object close
-LEVELS: idnamepricetags properties 
+LEVELS: tags properties 
 Indexes: -1 -1 
 Sets
 obiecte  
@@ -444,7 +444,7 @@ Indexes:
 Sets
 
 keyvalue array open
-LEVELS: propertiescost 
+LEVELS: cost 
 Indexes: -1 
 Sets
 liste obiecte  siruri 
