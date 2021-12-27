@@ -6,9 +6,6 @@
     #include <iostream>
 	#include <stack>
 	#include <unordered_set>
-	#include <fstream>
-
-	std::ofstream g("a.out");
 
 	/* Variabile CPP*/
 	std::stack<int> arrayIndexes;
@@ -78,44 +75,6 @@
 
 		return ans;
 	}
-
-	void afiseaza() {
-		std::stack<std::unordered_set<std::string>> s1 = sets;
-		std::stack<std::string> s2 = levels;
-		std::stack<int> s3 = arrayIndexes;
-
-		g << "LEVELS: ";
-
-		while (!s2.empty()) {
-			g << s2.top() << " ";
-			s2.pop();
-		}
-
-		g << '\n';
-
-		g << "Indexes: ";
-
-		while (!s3.empty()) {
-			g << s3.top() << " ";
-			s3.pop();
-		}
-
-		g << "\nSets\n";
-
-		while (!s1.empty()) {
-			std::unordered_set<std::string> st = s1.top();
-			s1.pop();
-
-			for (auto it : st) {
-				g << it << " ";
-			}
-
-			g << '\n';
-		}
-
-		g << '\n';
-	}
-
 %}
 
 /* Declarari de patterns */
@@ -133,13 +92,10 @@ NUMBER		[/+/-]?{DIGIT}+
 
 <INITIAL>{SPACE}* {}
 <INITIAL>\{ 	{
-	g << "INITIAL object open\n";
-	afiseaza();
 	level++;
 	BEGIN(STARTOBJECT);
 }
-<INITIAL>\[	{ 
-	g << "INITIAL array open\n";
+<INITIAL>\[	{
 	isArray = true;
 	level++;
 	sets.push(currentElements);
@@ -149,8 +105,6 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 
 	BEGIN(STARTARRAY);
-	afiseaza();
-
 }
 
 <STARTOBJECT>{SPACE}* 	{}
@@ -161,8 +115,6 @@ NUMBER		[/+/-]?{DIGIT}+
 	BEGIN(KEYVALUE);
 }
 <STARTOBJECT>\[ {
-	g << "STARTOBJECT array open\n";
-
 	level++;
 	currentElements.insert("liste");
 	arrayIndexes.push(-1);
@@ -170,12 +122,9 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentElements = std::unordered_set<std::string>();
 
 	BEGIN(STARTARRAY);
-	afiseaza();
 
 }
 <STARTOBJECT>\{	{
-	g << "startobject object open\n";
-
 	currentElements.insert("obiecte");
 	level++;
 	levels.push(currentNode);
@@ -185,12 +134,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentNode = "";
 
 	BEGIN(STARTOBJECT);
-	afiseaza();
-
 }
 <STARTOBJECT>\} {
-	g << "startobject object close\n";
-
 	if (levels.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -216,12 +161,8 @@ NUMBER		[/+/-]?{DIGIT}+
 		}
 
 	}
-	afiseaza();
-
 }
 <STARTOBJECT>\] {
-	g << "startobject array close\n";
-	afiseaza();
 	currentNode = "";
 }
 <STARTOBJECT>\, {
@@ -254,9 +195,6 @@ NUMBER		[/+/-]?{DIGIT}+
 }
 <STARTARRAY>\- {}
 <STARTARRAY>\[ 	{
-	g << "startarray array open\n";
-
-
 	level++;
 	sets.push(currentElements);
 	arrayIndexes.push(currentIndex);
@@ -266,13 +204,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
-	afiseaza();
-
  }
 <STARTARRAY>\{	{
-	g << "startarray object open\n";
-
-
 	currentElements.insert("obiecte");
 	currentElements.insert(currentValue);
 
@@ -286,12 +219,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
-	afiseaza();
-
 }
 <STARTARRAY>\}	{
-	g << "startarray object close\n";
-
 	if (sets.size()) {
 		std::cout << buildOutput() << '\n';
 
@@ -315,12 +244,8 @@ NUMBER		[/+/-]?{DIGIT}+
 			BEGIN(STARTARRAY);
 		}
 	}
-	afiseaza();
-
 }
 <STARTARRAY>\] {
-	g << "startarray array close\n";
-
 	currentValue = "";
 	currentNode = "";
 	currentIndex = arrayIndexes.top() + 1;
@@ -340,8 +265,6 @@ NUMBER		[/+/-]?{DIGIT}+
 	} else {
 		BEGIN(STARTARRAY);
 	}
-	afiseaza();
-
 }
 <STARTARRAY>\, {}
 
@@ -378,8 +301,6 @@ NUMBER		[/+/-]?{DIGIT}+
 	BEGIN(STARTOBJECT);
 }
 <KEYVALUE>\[			{
-	g << "keyvalue array open\n";
-
 	currentElements.insert("liste");
 	currentElements.insert(currentValue);
 
@@ -394,12 +315,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTARRAY);
-	afiseaza();
-
 }
 <KEYVALUE>\{			{
-	g << "keyvalue object open\n";
-
 	currentElements.insert(currentValue);
 	currentElements.insert("obiecte");
 
@@ -414,12 +331,8 @@ NUMBER		[/+/-]?{DIGIT}+
 	currentValue = "";
 
 	BEGIN(STARTOBJECT);
-	afiseaza();
-
 }
 <KEYVALUE>\}			{
-	g << "keyvalue object close\n";
-
 	currentElements.insert(currentValue);
 
 	if (levels.size()) {
@@ -448,12 +361,10 @@ NUMBER		[/+/-]?{DIGIT}+
 		}
 
 	}
-	afiseaza();
-
 }
 
 
-.|{SPACE}*           			{g << "ORICE ALTCEVA\n";}
+.|{SPACE}*	{}
 
 %%
 
