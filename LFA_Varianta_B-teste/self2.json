@@ -1,0 +1,53 @@
+[
+    {
+        "colors": "DA",
+        "TEST": {
+            "test": "NU",
+            "number": 4123,
+            "fraction": 123.123,
+            "fraction2": "1234.12341",
+            "null": null,
+            "da": true,
+            "nu": "false",
+            "price": {
+                "perbuc": 50,
+                "total": 500
+            }
+        },
+        "lista": [
+            {
+                "culoarere": [
+                    {
+                        "rgb": "(1234,3412,324,1)"
+                    },
+                    {
+                        "h": 15
+                    }
+                ]
+            },
+            {
+                "masa": 115
+            }
+        ]
+    },
+    {
+        "colors": "DAdada",
+        "lista2": [
+            {
+                "culoarere5": [
+                    {
+                        "rgb": "(12 412,324,1)"
+                    },
+                    {
+                        "h": 15,
+                        "w": 2
+                    }
+                ]
+            },
+            {
+                "masa": 115,
+                "masura": "kg"
+            }
+        ]
+    },
+]

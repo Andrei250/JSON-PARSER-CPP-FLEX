@@ -41,14 +41,16 @@
 		if (savedInd.size() >= 1) {
 			if (savedInd.top() != -1) {
 				path += "[" + std::to_string(savedInd.top()) + "] ";
+				savedInd.pop();
+
+				if (savedInd.size() >= 1 && savedInd.top() == -1) {
+					savedInd.pop();
+				}
+			} else {
+				savedInd.pop();
 			}
-
-			savedInd.pop();
 		}
-
-		if (savedInd.size() >= 1 && savedInd.top() == -1) {
-			savedInd.pop();
-		}
+		
 
 		while (!saved.empty()) {
 			int ind;
@@ -78,7 +80,7 @@
 %}
 
 /* Declarari de patterns */
-SYMBOL      [/#/$/%/@/+/./-/_/']
+SYMBOL      [/#/$/%/@/+/./-/_/'/(/)]
 DIGIT		[0-9]
 WORDPART	([a-zA-Z]|{DIGIT}|{SYMBOL})
 WORD        {WORDPART}+

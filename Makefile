@@ -3,8 +3,7 @@ LEX=flex
 LDFLAGS=-lfl
 CFLAGS=-c -g
 OFLAGS=-o $@
-SRC=json.l 
-RM=rm
+SRC=json.l
 
 json: json.o 
 	$(CC) -o $@ $^ $(LDFLAGS)
