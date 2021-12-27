@@ -362,7 +362,7 @@ NUMBER		[/+/-]?{DIGIT}+
 <KEYVALUE>{WORDPART} 	{
 	currentValue = "siruri";
 }
-<STARTARRAY>\- {}
+<KEYVALUE>\- {}
 <KEYVALUE>\,			{
 	currentElements.insert(currentValue);
 	currentValue = "";
